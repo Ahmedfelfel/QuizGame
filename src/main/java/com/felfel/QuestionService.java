@@ -13,7 +13,7 @@ public class QuestionService {
         try {
             System.out.println("How many questions do you want to add?");
             int numOfQuestions = sc.nextInt();
-            sc.nextLine(); // consume newline
+            sc.nextLine();
 
             for (int i = 0; i < numOfQuestions; i++) {
                 System.out.println("Enter question " + (i + 1) + ":");
@@ -21,7 +21,7 @@ public class QuestionService {
 
                 System.out.println("How many options?");
                 int numOfOptions = sc.nextInt();
-                sc.nextLine(); // consume newline
+                sc.nextLine();
 
                 String[] options = new String[numOfOptions];
                 for (int j = 0; j < numOfOptions; j++) {
@@ -31,14 +31,14 @@ public class QuestionService {
 
                 System.out.println("Enter the index of the correct option:");
                 int correctIndex = sc.nextInt();
-                sc.nextLine(); // consume newline
+                sc.nextLine();
 
                 Question q = new Question(qText, options, correctIndex - 1);
                 repository.saveQuestion(q);
             }
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please try again.");
-            sc.nextLine(); // clear invalid input
+            sc.nextLine();
         }
     }
 
@@ -47,20 +47,24 @@ public class QuestionService {
         System.out.println("Question removed successfully.");
     }
 
-    public void getQuestion(int index, boolean showAnswer) {
-        List<Question> questions = repository.loadQuestions();
-        if (index < 0 || index >= questions.size()) {
-            System.out.println("Invalid index");
-            return;
-        }
-
-        Question q = questions.get(index);
-        System.out.println((index + 1) + ". " + q.questionText());
+    public void displayQuestion(Question q, int index, boolean showAnswer) {
+        System.out.println("\nQuestion " + (index + 1) + ": " + q.questionText());
         for (int i = 0; i < q.options().length; i++) {
             System.out.println("   " + (i + 1) + ". " + q.options()[i]);
         }
         if (showAnswer) {
-            System.out.println("   Correct Option: " + (q.correctOptionIndex() + 1));
+            System.out.println("   ✅ Correct Option: " + (q.correctOptionIndex() + 1));
+        }
+    }
+
+    public void displayAllQuestions(boolean showAnswer) {
+        List<Question> questions = getAllQuestions();
+        if (questions.isEmpty()) {
+            System.out.println("No questions available.");
+            return;
+        }
+        for (int i = 0; i < questions.size(); i++) {
+            displayQuestion(questions.get(i), i, showAnswer);
         }
     }
 

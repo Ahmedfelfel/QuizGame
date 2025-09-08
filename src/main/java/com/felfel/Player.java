@@ -35,13 +35,9 @@ public class Player {
 
             for (int i = 0; i < questions.size(); i++) {
                 Question q = questions.get(i);
-                questionService.getQuestion(i, false);
+                questionService.displayQuestion(q, i, false);
                 System.out.println("Enter your answer (option number):");
                 int selectedOptionIndex = sc.nextInt() - 1;
-                if(selectedOptionIndex < 0 || selectedOptionIndex >= q.options().length) {
-                    System.out.println("Invalid option. Moving to the next question.");
-                    continue;
-                }
                 score += questionService.getScore(q, selectedOptionIndex);
             }
 
@@ -49,7 +45,7 @@ public class Player {
             retake();
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please try again.");
-            sc.nextLine(); // Clear invalid input
+            sc.nextLine();
         }
     }
 
@@ -70,7 +66,7 @@ public class Player {
             }
         } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please try again.");
-            sc.nextLine(); // Clear invalid input
+            sc.nextLine();
         }
     }
 }
