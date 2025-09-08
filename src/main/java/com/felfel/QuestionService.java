@@ -1,71 +1,78 @@
 package com.felfel;
-import java.util.ArrayList;
+
+import com.felfel.repository.QuestionRepository;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+
 public class QuestionService {
-    // This class can be expanded to include methods for managing questions, such as adding, removing, or fetching questions.
- final ArrayList <Question> question= new ArrayList<>();
- Scanner sc = new Scanner(System.in);
+    private final QuestionRepository repository = new QuestionRepository();
+    private final Scanner sc = new Scanner(System.in);
 
     public void addQuestions() {
-        // Implementation for adding a question
         try {
-            System.out.println("how many questions do you want to add?");
+            System.out.println("How many questions do you want to add?");
             int numOfQuestions = sc.nextInt();
+            sc.nextLine(); // consume newline
+
             for (int i = 0; i < numOfQuestions; i++) {
-                System.out.println("enter question " + (i + 1));
-                sc.nextLine();
+                System.out.println("Enter question " + (i + 1) + ":");
                 String qText = sc.nextLine();
-                System.out.println("How many options for question " + (i + 1) + "?");
+
+                System.out.println("How many options?");
                 int numOfOptions = sc.nextInt();
-                sc.nextLine();
+                sc.nextLine(); // consume newline
+
                 String[] options = new String[numOfOptions];
-                System.out.println("enter options for question " + (i + 1));
-                for (int j = 0; j < options.length; j++) {
-                    System.out.println("enter option " + (j + 1));
+                for (int j = 0; j < numOfOptions; j++) {
+                    System.out.println("Enter option " + (j + 1) + ":");
                     options[j] = sc.nextLine();
                 }
-                System.out.println("enter the index of the correct option for question " + (i + 1));
+
+                System.out.println("Enter the index of the correct option:");
                 int correctIndex = sc.nextInt();
-                question.add(new Question(qText, options, correctIndex - 1));
+                sc.nextLine(); // consume newline
+
+                Question q = new Question(qText, options, correctIndex - 1);
+                repository.saveQuestion(q);
             }
-        }
-        catch (InputMismatchException Miss){
+        } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please try again.");
-            sc.nextLine(); // Clear the invalid input
+            sc.nextLine(); // clear invalid input
         }
     }
 
-    public void removeQuestion(int index) {
-        // Implementation for removing a question
-        if (index < 0 || index >= question.size()) {
-            System.out.println("Invalid index");
-            return;
-        }
-            question.remove(index);
-            System.out.println("Question removed successfully");
+    public void removeQuestion(int id) {
+        repository.deleteQuestion(id);
+        System.out.println("Question removed successfully.");
     }
 
-    public void getQuestion(int index,boolean showAnswer) {
-        if (index < 0 || index >= question.size()) {
+    public void getQuestion(int index, boolean showAnswer) {
+        List<Question> questions = repository.loadQuestions();
+        if (index < 0 || index >= questions.size()) {
             System.out.println("Invalid index");
             return;
         }
 
-        Question q = question.get(index);
+        Question q = questions.get(index);
         System.out.println((index + 1) + ". " + q.questionText());
-
-        String[] options = q.options();
-        for (int j = 0; j < options.length; j++) {
-            System.out.println("   " + (j + 1) + ". " + options[j]);
+        for (int i = 0; i < q.options().length; i++) {
+            System.out.println("   " + (i + 1) + ". " + q.options()[i]);
         }
-        if (showAnswer){
-        System.out.println("   Correct Option: " + (q.correctOptionIndex() + 1));}
+        if (showAnswer) {
+            System.out.println("   Correct Option: " + (q.correctOptionIndex() + 1));
+        }
     }
+
     public boolean isEmpty() {
-        return question.isEmpty();
+        return repository.loadQuestions().isEmpty();
     }
+
     public int getScore(Question question, int selectedOptionIndex) {
         return question.correctOptionIndex() == selectedOptionIndex ? 1 : 0;
+    }
+
+    public List<Question> getAllQuestions() {
+        return repository.loadQuestions();
     }
 }

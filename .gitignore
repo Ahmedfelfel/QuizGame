@@ -3,6 +3,16 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Ignore config file with secrets
+config.properties
+
+# Ignore compiled class files
+*.class
+# Ignore log files
+*.log
+# Ignore Test Db Connection file
+DbTest.java
+
 ### IntelliJ IDEA ###
 .idea/modules.xml
 .idea/jarRepositories.xml
@@ -11,6 +21,7 @@ target/
 *.iws
 *.iml
 *.ipr
+
 
 ### Eclipse ###
 .apt_generated
