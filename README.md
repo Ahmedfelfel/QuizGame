@@ -38,9 +38,23 @@ QuizGame is a console-based multiple-choice quiz system built with Java, Postgre
 
 ## 📁 Project Structure
 
-
-QuizGame/ ├── src/ │   └── com/felfel/ │       ├── Main.java │       ├── Player.java │       ├── GameMaker.java │       ├── Question.java │       ├── QuestionService.java │       ├── config/ │       │   └── ConfigManager.java │       ├── db/ │       │   └── DatabaseManager.java │       └── repository/ │           └── QuestionRepository.java ├── config.properties ├── pom.xml ├── .gitignore
-
+📦 QuizGame/
+├── 📄 pom.xml                  → Maven build configuration
+├── 📄 config.properties        → Secure DB credentials (excluded from Git)
+├── 📄 .gitignore               → Ignored files and folders
+├── 🗂️ src/
+│   └── 📦 com.felfel/
+│       ├── 🚀 Main.java              → Entry point to launch Player or GameMaker
+│       ├── 👤 Player.java            → Quiz logic for players
+│       ├── 🛠️ GameMaker.java         → Admin interface to manage questions
+│       ├── ❓ Question.java           → Data model (Java record)
+│       ├── 🧠 QuestionService.java    → Business logic layer
+│       ├── 🔐 config/
+│       │   └── 🧾 ConfigManager.java  → Loads DB config securely
+│       ├── 🗃️ db/
+│       │   └── 🔌 DatabaseManager.java → Manages PostgreSQL connections
+│       └── 📂 repository/
+│           └── 📥 QuestionRepository.java → Handles DB operations (CRUD)
 ---
 
 ## 🛠️ Setup Instructions
